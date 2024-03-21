@@ -23,7 +23,11 @@ template <typename T>
 class Matrix {
  protected:
   // TODO(P0): Add implementation
-  Matrix(int r, int c) {}
+  Matrix(int r, int c) {
+	rows = r;
+	cols = c;
+	linear = new T[r*c];
+  }
 
   // # of rows in the matrix
   int rows;
@@ -51,32 +55,50 @@ class Matrix {
   virtual void MatImport(T *arr) = 0;
 
   // TODO(P0): Add implementation
-  virtual ~Matrix() = default;
+  virtual ~Matrix() {
+	  delete[] linear;
+  }
 };
 
 template <typename T>
 class RowMatrix : public Matrix<T> {
  public:
   // TODO(P0): Add implementation
-  RowMatrix(int r, int c) : Matrix<T>(r, c) {}
+  RowMatrix(int r, int c) : Matrix<T>(r, c) {
+	  data_ = new T*[r];
+	  for (int i = 0; i < r; i++) {
+		  data_[i] = &(this -> linear[i*c]);
+  }
 
   // TODO(P0): Add implementation
-  int GetRows() override { return 0; }
+  int GetRows() override { return this -> rows; }
 
   // TODO(P0): Add implementation
-  int GetColumns() override { return 0; }
+  int GetColumns() override { return this -> cols; }
 
   // TODO(P0): Add implementation
-  T GetElem(int i, int j) override { return data_[i][j]; }
+  T GetElem(int i, int j) override { return data_[i - 1][j - 1]; }
 
   // TODO(P0): Add implementation
-  void SetElem(int i, int j, T val) override {}
+  void SetElem(int i, int j, T val) override { data_[i - 1][j - 1] = val; }
 
   // TODO(P0): Add implementation
-  void MatImport(T *arr) override {}
+  void MatImport(T *arr) override {
+	  for (int i = 0; i < this -> rows; i++) {
+		  for (int j = 0; j < this -> cols; j++) {
+			  data_[i][j] = arr[i * this -> cols + j];
+		  }
+	  }
+
+  }
 
   // TODO(P0): Add implementation
-  ~RowMatrix() override = default;
+  ~RowMatrix() override {
+	  for (int i = 0; i < this -> rows; i++) {
+		  delete[] data_[i];
+	  }
+	  delete[] data_;
+  }
 
  private:
   // 2D array containing the elements of the matrix in row-major format
