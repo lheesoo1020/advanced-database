@@ -68,6 +68,7 @@ class RowMatrix : public Matrix<T> {
 	  data_ = new T*[r];
 	  for (int i = 0; i < r; i++) {
 		  data_[i] = &(this -> linear[i*c]);
+	  }
   }
 
   // TODO(P0): Add implementation
