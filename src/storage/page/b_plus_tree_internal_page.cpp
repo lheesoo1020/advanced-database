@@ -11,6 +11,8 @@
 
 #include <iostream>
 #include <sstream>
+#include <algorithm>
+#include <iterator>
 
 #include "common/exception.h"
 #include "storage/page/b_plus_tree_internal_page.h"
@@ -48,7 +50,7 @@ void B_PLUS_TREE_INTERNAL_PAGE_TYPE::SetKeyAt(int index, const KeyType &key) { a
  */
 INDEX_TEMPLATE_ARGUMENTS
 int B_PLUS_TREE_INTERNAL_PAGE_TYPE::ValueIndex(const ValueType &value) const {
-  auto it = std:;find_if(array, array + GetSize(), [&value](const auto &pair) {return pair.second == value; });
+  auto it = std::find_if(array, array + GetSize(), [&value](const auto &pair) {return pair.second == value; });
   return std::distance(array, it);
 }
 
